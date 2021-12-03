@@ -1,6 +1,6 @@
 
 
-input = open("input_01.txt")
+input = open("input.txt")
 lines = [int(line.strip()) for line in input]
 input.close()
 
