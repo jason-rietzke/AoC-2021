@@ -24,3 +24,4 @@ epsilonRateDecimal = int(epsilonRateBinary, 2)
 print("Gamma Rate: ", gammaRateDecimal)
 print("Epsilon Rate: ", epsilonRateDecimal)
 print("Power consumption: ", gammaRateDecimal * epsilonRateDecimal)
+
