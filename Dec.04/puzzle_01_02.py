@@ -82,7 +82,6 @@ def check_board(board, draws):
 		"rest": rest_sum,
 	}
 
-
 # check all boards
 runs = []
 for board in boards:
@@ -90,6 +89,11 @@ for board in boards:
 
 best_index = runs.index(min(runs, key=lambda x: x["count"]))
 best_run = runs[best_index]
+worst_index = runs.index(max(runs, key=lambda x: x["count"]))
+worst_run = runs[worst_index]
 
 print("The best board is #{} with {} draws and {} rest.".format(best_index + 1, best_run["count"], best_run["rest"]))
 print("Final score: " + str(best_run["rest"] * best_run["draw"]))
+print("--------------------")
+print("The worst board is #{} with {} draws and {} rest.".format(worst_index + 1, worst_run["count"], worst_run["rest"]))
+print("Final score: " + str(worst_run["rest"] * worst_run["draw"]))
