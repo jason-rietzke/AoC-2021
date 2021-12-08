@@ -5,35 +5,39 @@ input_lines = [line.strip() for line in input]
 input.close()
 
 # load fish list
-fish_list = [[int(value) for value in input_lines[0].split(",")]]
+fish_list = [int(value) for value in input_lines[0].split(",")] # input
+# fish_list = [int(value) for value in input_lines[0].split(":")[1].split(",")] # test
 
-# # test input
-# fish_list = []
-# for line in input_lines:
-# 	values = line.split(":")[1].split(",")
-# 	fishes = [int(value) for value in values]
-# 	fish_list.append(fishes)
+fish_data = [0 for i in range(0, 9)]
 
+for fish in fish_list:
+	fish_data[fish] += 1
 
-def forecast_popultation(list, day_count):
-	new_fish_list = list[:]
-	while len(new_fish_list) <= day_count:
-		new_fish_generation = new_fish_list[-1]
-		for i in range(len(new_fish_list[-1])):
-			fish = new_fish_list[-1][i]
-			if fish > 0:
-				new_fish_generation[i] = fish - 1
+def forecast_popultation(data, day_count):
+	fish_data = data[:]
+	day = 1
+	fish_data_update = fish_data[:]
+	while day <= day_count:
+		for i in range(0, 9):
+			if i > 0:
+				fish_data_update[i - 1] += fish_data[i]
+				fish_data_update[i] -= fish_data[i]
 			else:
-				new_fish_generation[i] = 6
-				new_fish_generation.append(8)
-		new_fish_list.append(new_fish_generation)
-	return new_fish_list
+				fish_data_update[6] += fish_data[0]
+				fish_data_update[8] += fish_data[0]
+				fish_data_update[0] -= fish_data[0]
+		fish_data = fish_data_update[:]
+		day += 1
+	return fish_data
 
 
 # forecast fish list for 80 generations
-fish_list_80 = forecast_popultation(fish_list, 80)
-print("There are {} fishes in day 80" .format(len(fish_list_80[-1])))
+fish_data_80 = forecast_popultation(fish_data, 80)
+fish_sum_80 = sum( data for data in fish_data_80 )
+print("There are {} fishes in day 80" .format(fish_sum_80))
 
 # forecast fish list for 256 generations
-fish_list_256 = forecast_popultation(fish_list, 256)
-print("There are {} fishes in day 256" .format(len(fish_list_256[-1])))
+fish_data_256 = forecast_popultation(fish_data, 256)
+fish_sum_256 = sum( data for data in fish_data_256 )
+print("There are {} fishes in day 256" .format(fish_sum_256))
+
