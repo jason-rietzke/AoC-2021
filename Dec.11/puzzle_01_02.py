@@ -12,8 +12,15 @@ for y in range(len(input_lines)):
 
 
 flash_count = 0
+flash_count_100 = 0
+synchronized = False
+iteration = 0
 
-for i in range(100):
+while not synchronized:
+
+	if iteration == 100:
+		flash_count_100 = flash_count
+
 	flash_map = []
 
 	# increase energy by 1
@@ -58,17 +65,25 @@ for i in range(100):
 			if map[y-1][x+1] > 9: new_flash_map.append([x+1, y-1])
 		flash_map += new_flash_map
 
-	# flash and adjust energy levels
+	# flash and adjust energy levels + check for synchronization
+	current_flash_count = 0
 	for y in range(len(map)):
 		for x in range(len(map[y])):
 			if map[y][x] > 9:
 				map[y][x] = 0
+				current_flash_count += 1
 				flash_count += 1
 
+	if current_flash_count == len(map)*len(map[0]):
+		synchronized = True
 
+	iteration += 1
 	# print energy map
 	for row in map:
 		print(row)
 	print("----------")
 
-print("There where {} flashes" .format(flash_count))
+
+print("Synchronized after {} iterations." .format(iteration))
+print("Flash count after 100 iterations {}" .format(flash_count_100))
+print("Total flash count: {}" .format(flash_count))
