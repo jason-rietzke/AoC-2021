@@ -1,6 +1,6 @@
 
 
-input = open("test_input.txt")
+input = open("input.txt")
 input_lines = [line.strip() for line in input]
 input.close()
 
@@ -47,7 +47,7 @@ class Graph:
 		if node.is_end: return self.paths.append(path)
 
 		self.trace_step += 1
-		print("Trace step:", self.trace_step)
+		print("Trace step: {:,}" .format(self.trace_step))
 
 		for link in node.linked:
 			if link.is_start: continue
@@ -58,6 +58,17 @@ class Graph:
 					count = small_caves.count(small_cave)
 					if count > small_cave_max: exit_loop = True
 				if exit_loop: continue
+
+				small_caved = [n for n in path if not n.large_cave and n.name != "start" and n.name != "end"]
+				small_caved.sort(key=lambda x: x.name)
+				caves = {}
+				for cave in small_caved:
+					caves[cave.name] = caves[cave.name] + 1 if cave.name in caves else 1
+				number_of_second_visits = 0
+				for cave in caves:
+					if caves[cave] == 2: number_of_second_visits += 1
+
+				if number_of_second_visits > 1: continue
 
 			if link == path[-1]: continue
 			new_path = path + [link]
@@ -82,29 +93,7 @@ for line in input_lines:
 	graph.add_link(graph.get_node(node1), graph.get_node(node2))
 
 paths_1 = graph.get_paths(1)
-print(len(paths_1))
-
 paths_2 = graph.get_paths(2)
-print(len(paths_2))
-remove_indexes = []
-
-for i in range(len(paths_2)):
-	path = paths_2[ len(paths_2) - i - 1 ][:]
-	small_caved = [n for n in path if not n.large_cave and n.name != "start" and n.name != "end"]
-	small_caved.sort(key=lambda x: x.name)
-	caves = {}
-	for cave in small_caved:
-		caves[cave.name] = caves[cave.name] + 1 if cave.name in caves else 1
-	number_of_second_visits = 0
-	for cave in caves:
-		if caves[cave] == 2: number_of_second_visits += 1
-
-	if number_of_second_visits > 1:
-		remove_indexes.append(i)
-
-remove_indexes.reverse()
-for index in remove_indexes:
-	paths_2.pop(index)
 
 print("There are {} paths through the cave system that visit small caves at most once." .format(len(paths_1)))
 print("There are {} paths through the cave system that visits one small caves at most twice." .format(len(paths_2)))
