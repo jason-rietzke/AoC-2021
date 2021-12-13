@@ -74,3 +74,4 @@ for instruction in fold_instructions:
 	if instruction == fold_instructions[0]:
 		print("There are {} dots visible after the first fold" .format(len(coordinates)))
 
+print_map()
