@@ -1,3 +1,4 @@
+import time
 
 
 input = open("input.txt")
@@ -9,10 +10,10 @@ pair_insertion_rules = {}
 for line in input_lines[2:]:
 	pair_insertion_rules[line.split(" -> ")[0]] = line.split(" -> ")[1]
 
-total_depth = 20 # 10 for Part 1 and 40 for Part 2
+total_depth = 40 # 10 for Part 1 and 40 for Part 2
 elements = {}
 
-print("{} calculations needed" .format(pow(2, total_depth)))
+print("{:,} calculations needed" .format(pow(2, total_depth)))
 
 class Node:
 
@@ -50,16 +51,20 @@ for element in polymer:
 	else:
 		elements[element] = 1
 
+global_timer = time.time()
 length = len(polymer)
 for i in range(length - 1):
+	local_timer = time.time()
 	pair = polymer[i:i+2]
 	sub_path = 0
 	node = Node(pair)
 	node.depth = 0
 	node.run()
-	print("{} \t {}%".format(polymer[i:i+2], round(100 * (i+2) / length, 2)))
+	local_timer = time.time() - local_timer
+	print("{} \t {}% \t {}s".format(polymer[i:i+2], round(100 * (i+2) / length, 2), round(local_timer, 2)))
 
-print(elements)
+global_timer = time.time() - global_timer
+print("Total time needed: {}s".format(round(global_timer, 2)))
 
 most_common_element = {
 	"element": "",
