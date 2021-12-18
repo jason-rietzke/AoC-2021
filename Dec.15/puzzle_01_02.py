@@ -1,9 +1,27 @@
 import time
 
 
-input = open("test_input.txt")
+input = open("input.txt")
 input_lines = [line.strip() for line in input]
 input.close()
+
+def scale_map(map, iterations):
+	height = len(map)
+	width = len(map[0])
+	new_map = []
+	for y in range(height):
+		new_map.append([])
+		for i in range(iterations):
+			for x in range(width):
+				new_value = map[y][x] + i if map[y][x] + i < 10 else map[y][x] + i - 9
+				new_map[-1].append(new_value)
+	for i in range(1, iterations):
+		for y in range(height):
+			new_map.append([])
+			for x in range(len(new_map[y])):
+				new_value = new_map[y][x] + i if new_map[y][x] + i < 10 else new_map[y][x] + i - 9
+				new_map[-1].append(new_value)
+	return new_map
 
 
 # A* search
@@ -51,11 +69,17 @@ def get_neighbors(map, point):
 
 
 start_time = time.time()
-
 map = [[int(x) for x in line] for line in input_lines]
 source = (0, 0)
 target = (len(map[0]) - 1, len(map) - 1)
 risk = a_star_search(map, source, target)
 print("Total risk: {}".format(risk))
+print("elapsed time: " + str(time.time() - start_time))
 
+start_time = time.time()
+map = scale_map(map, 5)
+source = (0, 0)
+target = (len(map[0]) - 1, len(map) - 1)
+risk = a_star_search(map, source, target)
+print("Total risk on scaled map: {}".format(risk))
 print("elapsed time: " + str(time.time() - start_time))
